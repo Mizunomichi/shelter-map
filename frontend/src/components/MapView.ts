@@ -468,7 +468,7 @@ export async function initializeMap(containerId: string, supabase: SupabaseClien
 
   // Subscribe to real-time updates (only if Supabase is available)
   if (!error) {
-    const channel = supabase
+    supabase
       .channel('shelters-changes')
       .on(
         'postgres_changes',
