@@ -1,7 +1,6 @@
 // CoordinatorUpdateForm component - PIN-authenticated occupancy updates
 
 import { SupabaseClient } from '@supabase/supabase-js'
-import { Shelter } from '../lib/supabase'
 import { enqueueOfflineSubmission, getQueuedCount } from '../lib/serviceWorker'
 
 export async function renderCoordinatorForm(containerId: string, supabase: SupabaseClient) {
@@ -31,7 +30,7 @@ export async function renderCoordinatorForm(containerId: string, supabase: Supab
           <label for="shelter-select">Shelter</label>
           <select id="shelter-select" required>
             <option value="">Select a shelter...</option>
-            ${shelters?.map((s: Shelter) => `<option value="${s.id}">${s.name}</option>`).join('')}
+            ${shelters?.map((s: { id: string | number; name: string }) => `<option value="${s.id}">${s.name}</option>`).join('')}
           </select>
         </div>
 
@@ -140,6 +139,7 @@ export async function renderCoordinatorForm(containerId: string, supabase: Supab
   }
 
   function updateQueuedCount(count: number) {
+    if (!container) return
     const existingMsg = container.querySelector('p[style*="color: #f59e0b"]')
     if (existingMsg) {
       if (count > 0) {
